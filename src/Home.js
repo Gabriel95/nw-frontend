@@ -42,6 +42,54 @@ class Home extends React.Component {
               </div>
             </div>
           </div>
+          <h2 className="mt-5 mb-3">
+            Net Worth History <i className="fas fa-history ml-1"></i>
+          </h2>
+          <table className="table">
+            <thead className="thead-dark">
+              <tr>
+                <th>#</th>
+                <th>Date Created</th>
+                <th>Time</th>
+                <th>Total</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>27/3/2020</td>
+                <td>16:30</td>
+                <td>$900,000.00</td>
+                <td>
+                  <div className="btn btn-group d-block">
+                    <button className="btn btn-outline-secondary w-50">
+                      View
+                    </button>
+                    <button className="btn btn-outline-danger w-50">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>1/3/2020</td>
+                <td>15:30</td>
+                <td>$80,000.00</td>
+                <td>
+                  <div className="btn btn-group d-block">
+                    <button className="btn btn-outline-secondary w-50">
+                      View
+                    </button>
+                    <button className="btn btn-outline-danger w-50">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     );
