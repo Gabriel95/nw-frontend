@@ -4,7 +4,7 @@ class Login extends React.Component {
   render() {
     return (
       <div className="container mt-5 pt-5">
-        <form className="w-50 mx-auto p-5">
+        <form className="w-50 mx-auto p-5 shadow border border-secondary rounded">
           <h2 className="text-center">Net Worth Calculator</h2>
           <div className="form-group">
             <input
