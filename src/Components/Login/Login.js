@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import * as AuthActions from '../../Store/Actions/auth';
+import Spinner from '../Spinner/Spinner';
 
 class Login extends React.Component {
   state = {
@@ -69,36 +70,47 @@ class Login extends React.Component {
     );
   };
 
+  getFormBody = () => {
+    if (this.props.loading) return <Spinner />;
+    return (
+      <div>
+        <div className="form-group">
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter Email"
+            className={this.getInputClass('email')}
+            onChange={this.inputChangeHandler}
+            onBlur={this.inputBlurHandler}
+            value={this.state.loginForm.email.value}
+          />
+        </div>
+        <div className="form-group mb-3">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            className={this.getInputClass('password')}
+            onChange={this.inputChangeHandler}
+            onBlur={this.inputBlurHandler}
+            value={this.state.loginForm.password.value}
+          />
+        </div>
+      </div>
+    );
+  };
+
   render() {
+    if (this.props.isAuthenticated) return <Redirect to="/" />;
     return (
       <div className="container mt-5 pt-5">
         <form
           className="w-50 mx-auto p-5 shadow border border-secondary rounded"
           onSubmit={this.handleSubmit}
         >
-          <h2 className="text-center">Net Worth Calculator</h2>
-          <div className="form-group">
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter Email"
-              className={this.getInputClass('email')}
-              onChange={this.inputChangeHandler}
-              onBlur={this.inputBlurHandler}
-              value={this.state.loginForm.email.value}
-            />
-          </div>
-          <div className="form-group mb-3">
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              className={this.getInputClass('password')}
-              onChange={this.inputChangeHandler}
-              onBlur={this.inputBlurHandler}
-              value={this.state.loginForm.password.value}
-            />
-          </div>
+          <h2 className="text-center mb-3">Net Worth Calculator</h2>
+          <h5 className="text-center text-danger">{this.props.errorMessage}</h5>
+          {this.getFormBody()}
           <button type="submit" className="btn btn-primary btn-block">
             Sign In
           </button>
@@ -111,10 +123,18 @@ class Login extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.loading,
+    errorMessage: state.error,
+    isAuthenticated: state.token !== null
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     onAuth: (email, password) => dispatch(AuthActions.auth(email, password))
   };
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
