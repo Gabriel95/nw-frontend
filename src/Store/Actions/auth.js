@@ -1,5 +1,5 @@
 import * as ActionTypes from '../Actions/ActionTypes';
-import axiosintace from '../../axios-nw';
+import axiosinstance from '../../axios-nw';
 import jwtDecode from 'jwt-decode';
 
 export const authStart = () => {
@@ -29,7 +29,8 @@ export const auth = (email, password) => {
       email: email,
       password: password
     };
-    axiosintace
+    console.log(email, password);
+    axiosinstance
       .post('/auth', body)
       .then(response => {
         const expiration = jwtDecode(response.data).exp * 1000;
