@@ -20,6 +20,10 @@ class Login extends React.Component {
     }
   };
 
+  componentDidMount() {
+    this.props.tryAuth();
+  }
+
   inputChangeHandler = event => {
     const updatedLoginForm = { ...this.state.loginForm };
     const updatedInput = { ...updatedLoginForm[event.target.id] };
@@ -133,7 +137,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password) => dispatch(AuthActions.auth(email, password))
+    onAuth: (email, password) => dispatch(AuthActions.auth(email, password)),
+    tryAuth: () => dispatch(AuthActions.authCheckState())
   };
 };
 
