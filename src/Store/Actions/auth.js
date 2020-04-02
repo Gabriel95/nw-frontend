@@ -49,7 +49,7 @@ export const authCheckState = () => {
         dispatch(logout());
       } else {
         dispatch(authSuccess(token));
-        const currentSeconds = new Date().getSeconds();
+        const currentSeconds = new Date().getTime();
         const newExpiration = expirationDate - currentSeconds;
         dispatch(checkAuthTimeout(newExpiration));
       }
@@ -64,7 +64,6 @@ export const auth = (email, password) => {
       email: email,
       password: password
     };
-    console.log(email, password);
     axiosinstance
       .post('/auth', body)
       .then(response => {

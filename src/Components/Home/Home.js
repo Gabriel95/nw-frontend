@@ -6,7 +6,7 @@ import * as AuthActions from '../../Store/Actions/auth';
 
 class Home extends React.Component {
   componentDidMount() {
-    this.props.tryAuth();
+    this.props.tryAuth('home');
   }
 
   render() {
@@ -107,7 +107,7 @@ class Home extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.token
+    token: state.auth.token
   };
 };
 

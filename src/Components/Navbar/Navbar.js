@@ -50,7 +50,7 @@ class Navbar extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { username: state.firstname + ' ' + state.lastname };
+  return { username: state.auth.firstname + ' ' + state.auth.lastname };
 };
 
 const mapDispatchToProps = dispatch => {
