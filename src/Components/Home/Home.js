@@ -1,8 +1,17 @@
 import React from 'react';
 import Navbar from '../Navbar/Navbar';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as AuthActions from '../../Store/Actions/auth';
 
 class Home extends React.Component {
+  componentDidMount() {
+    this.props.tryAuth();
+  }
+
   render() {
+    if (this.props.token === null) return <Redirect to="/login" />;
+
     return (
       <div>
         <Navbar />
@@ -96,4 +105,16 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    token: state.token
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    tryAuth: () => dispatch(AuthActions.authCheckState())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
