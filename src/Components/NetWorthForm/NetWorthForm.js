@@ -6,6 +6,7 @@ import * as NetWorthActions from '../../Store/Actions/networth';
 import * as labelMapper from '../../LabelMapper';
 import FormInput from './FormInput';
 import Spinner from '../Spinner/Spinner';
+import Alert from '../Alert/Alert';
 
 class NetWorthForm extends React.Component {
   state = {
@@ -210,6 +211,19 @@ class NetWorthForm extends React.Component {
       }
     }
     this.props.submitForm(this.props.token, NetWorthFormSubmit);
+    this.clearForm();
+  };
+
+  clearForm = () => {
+    const currentState = { ...this.state.forminputsvalues };
+    for (let categorykey in currentState) {
+      const category = currentState[categorykey];
+      for (let key in category) {
+        category[key].value = 0;
+        category[key].valid = true;
+      }
+    }
+    this.setState({ forminputsvalues: currentState });
   };
 
   checkInputValidity = value => {
@@ -238,6 +252,27 @@ class NetWorthForm extends React.Component {
     return inputArray;
   };
 
+  getMessage = () => {
+    if (this.props.postNetWorthError !== null) {
+      return (
+        <Alert
+          type="danger"
+          strongMessage="Failed saving net worth!"
+          message={this.props.postNetWorthError}
+        />
+      );
+    }
+    if (this.props.postNetWorthSuccessMessage !== null) {
+      return (
+        <Alert
+          type="success"
+          strongMessage="Success!"
+          message={this.props.postNetWorthSuccessMessage}
+        />
+      );
+    }
+  };
+
   getFormBody = () => {
     if (this.props.isLoading) return <Spinner />;
 
@@ -249,41 +284,44 @@ class NetWorthForm extends React.Component {
       totalCash + totalInvestedAssets + totalUseAssets - totalLiabilities;
 
     return (
-      <form onSubmit={this.formSubmitHandler}>
-        <h2>Assets</h2>
+      <div>
+        {this.getMessage()}
+        <form onSubmit={this.formSubmitHandler}>
+          <h2>Assets</h2>
 
-        <h3>Cash and Cash Equivalents</h3>
-        {this.generateInputs('cash')}
-        <h5 className="text-right">
-          Total Cash: ${totalCash.toLocaleString()}
-        </h5>
-        <h3>Invested Assets</h3>
-        {this.generateInputs('investedassets')}
-        <h5 className="text-right">
-          Total Invested Assets: ${totalInvestedAssets.toLocaleString()}
-        </h5>
-        <h3>Use Assets</h3>
-        {this.generateInputs('useassets')}
-        <h5 className="text-right">
-          Total Use Assets: ${totalUseAssets.toLocaleString()}
-        </h5>
-        <h3>Liabilities</h3>
-        {this.generateInputs('liabilities')}
-        <h5 className="text-right">
-          Total Invested Liabilities: ${totalLiabilities.toLocaleString()}
-        </h5>
-        <h4 className="text-right my-3">
-          Total Net Worth: ${total.toLocaleString()}
-        </h4>
-        <div className="btn-group d-block mb-5">
-          <button type="submit" className="btn btn-success w-50">
-            Submit
-          </button>
-          <button type="" className="btn btn-danger w-50">
-            Cancel
-          </button>
-        </div>
-      </form>
+          <h3>Cash and Cash Equivalents</h3>
+          {this.generateInputs('cash')}
+          <h5 className="text-right">
+            Total Cash: ${totalCash.toLocaleString()}
+          </h5>
+          <h3>Invested Assets</h3>
+          {this.generateInputs('investedassets')}
+          <h5 className="text-right">
+            Total Invested Assets: ${totalInvestedAssets.toLocaleString()}
+          </h5>
+          <h3>Use Assets</h3>
+          {this.generateInputs('useassets')}
+          <h5 className="text-right">
+            Total Use Assets: ${totalUseAssets.toLocaleString()}
+          </h5>
+          <h3>Liabilities</h3>
+          {this.generateInputs('liabilities')}
+          <h5 className="text-right">
+            Total Invested Liabilities: ${totalLiabilities.toLocaleString()}
+          </h5>
+          <h4 className="text-right my-3">
+            Total Net Worth: ${total.toLocaleString()}
+          </h4>
+          <div className="btn-group d-block mb-5">
+            <button type="submit" className="btn btn-success w-50">
+              Submit
+            </button>
+            <button type="" className="btn btn-danger w-50">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     );
   };
 
@@ -309,6 +347,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     tryAuth: () => dispatch(AuthActions.authCheckState()),
+    startForm: () => dispatch(NetWorthActions.startForm()),
     submitForm: (token, body) =>
       dispatch(NetWorthActions.postNetWorth(token, body))
   };

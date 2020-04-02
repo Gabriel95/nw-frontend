@@ -34,3 +34,9 @@ export const postNetWorth = (token, body) => {
       .catch(error => dispatch(postNetWorthFail(error)));
   };
 };
+
+export const startForm = () => {
+  return {
+    type: ActionTypes.START_FORM
+  };
+};

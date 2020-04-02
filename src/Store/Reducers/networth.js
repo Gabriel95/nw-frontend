@@ -29,6 +29,13 @@ const postNetWorthFail = (state, action) => {
   });
 };
 
+const startForm = (state, action) => {
+  return updateObject(state, {
+    postNetWorthError: null,
+    postNetWorthSuccessMessage: null
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.POST_NETWORTH_START:
@@ -37,6 +44,8 @@ const reducer = (state = initialState, action) => {
       return postNetWorthSuccess(state, action);
     case ActionTypes.POST_NETWORTH_FAIL:
       return postNetWorthFail(state, action);
+    case ActionTypes.START_FORM:
+      return startForm(state, action);
     default:
       return state;
   }
