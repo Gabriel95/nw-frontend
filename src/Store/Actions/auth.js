@@ -1,5 +1,5 @@
 import * as ActionTypes from '../Actions/ActionTypes';
-import axiosintace from '../../axios-nw';
+import axiosinstance from '../../axios-nw';
 import jwtDecode from 'jwt-decode';
 
 export const authStart = () => {
@@ -22,6 +22,41 @@ export const authFail = error => {
   };
 };
 
+export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('expirationDate');
+  return {
+    type: ActionTypes.AUTH_LOGOUT
+  };
+};
+
+export const checkAuthTimeout = expirationTime => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
+  };
+};
+
+export const authCheckState = () => {
+  return dispatch => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      dispatch(logout());
+    } else {
+      const expirationDate = localStorage.getItem('expirationDate');
+      if (expirationDate <= new Date().getSeconds()) {
+        dispatch(logout());
+      } else {
+        dispatch(authSuccess(token));
+        const currentSeconds = new Date().getSeconds();
+        const newExpiration = expirationDate - currentSeconds;
+        dispatch(checkAuthTimeout(newExpiration));
+      }
+    }
+  };
+};
+
 export const auth = (email, password) => {
   return dispatch => {
     dispatch(authStart());
@@ -29,13 +64,15 @@ export const auth = (email, password) => {
       email: email,
       password: password
     };
-    axiosintace
+    console.log(email, password);
+    axiosinstance
       .post('/auth', body)
       .then(response => {
         const expiration = jwtDecode(response.data).exp * 1000;
         localStorage.setItem('token', response.data);
         localStorage.setItem('expirationDate', expiration);
         dispatch(authSuccess(response.data));
+        dispatch(checkAuthTimeout(expiration));
       })
       .catch(error => {
         dispatch(authFail(error));

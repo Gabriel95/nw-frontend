@@ -15,6 +15,7 @@ function App() {
         <Route path="/networthform" component={NetWorthForm} />
         <Route path="/networthdetail" component={NetWorthDetail} />
         <Route path="/signup" component={SignUp} />
+        <Route path="/home" component={Home} />
         <Route path="/" exact component={Home} />
       </Switch>
     </div>
