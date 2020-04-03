@@ -140,3 +140,38 @@ export const deleteNetWorth = (token, netWorthId) => {
       .catch(error => dispatch(deleteNetWorthFail(error)));
   };
 };
+
+export const getNetWorthStart = () => {
+  return {
+    type: ActionTypes.GET_NETWORTH_START
+  };
+};
+
+export const getNetWorthSuccess = data => {
+  return {
+    type: ActionTypes.GET_NETWORTH_SUCCESS,
+    netWorthDetail: data
+  };
+};
+
+export const getNetWorthFail = error => {
+  return {
+    type: ActionTypes.GET_NETWORTH_FAIL,
+    error: error.message
+  };
+};
+
+export const getNetWorth = (token, networthId) => {
+  return dispatch => {
+    dispatch(getNetWorthStart());
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axiosinstance
+      .get('/networth/' + networthId, config)
+      .then(response => {
+        dispatch(getNetWorthSuccess(response.data));
+      })
+      .catch(error => dispatch(getNetWorthFail(error)));
+  };
+};

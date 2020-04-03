@@ -13,7 +13,11 @@ const initialState = {
   allNetWorths: [],
   allNetWorthsError: null,
   allNetWorthsLoading: false,
-  deleteNetWorthErrorMessage: null
+  deleteNetWorthErrorMessage: null,
+
+  netWorthDetail: null,
+  netWorthDetailError: null,
+  netWorthDetailLoading: false
 };
 
 const postNetWorthStart = (state, action) => {
@@ -109,6 +113,28 @@ const deleteNetWorthFail = (state, action) => {
   });
 };
 
+const getNetWorthStart = (state, action) => {
+  return updateObject(state, {
+    netWorthDetailError: null,
+    netWorthDetail: null,
+    netWorthDetailLoading: true
+  });
+};
+
+const getNetWorthSuccess = (state, action) => {
+  return updateObject(state, {
+    netWorthDetail: action.netWorthDetail,
+    netWorthDetailLoading: false
+  });
+};
+
+const getNetWorthFail = (state, action) => {
+  return updateObject(state, {
+    netWorthDetailError: action.error,
+    netWorthDetailLoading: false
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.POST_NETWORTH_START:
@@ -137,6 +163,12 @@ const reducer = (state = initialState, action) => {
       return deleteNetWorthSuccess(state, action);
     case ActionTypes.DELETE_NETWORTH_FAIL:
       return deleteNetWorthFail(state, action);
+    case ActionTypes.GET_NETWORTH_START:
+      return getNetWorthStart(state, action);
+    case ActionTypes.GET_NETWORTH_SUCCESS:
+      return getNetWorthSuccess(state, action);
+    case ActionTypes.GET_NETWORTH_FAIL:
+      return getNetWorthFail(state, action);
     default:
       return state;
   }
