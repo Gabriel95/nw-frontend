@@ -8,7 +8,12 @@ const initialState = {
 
   currentNetWorth: null,
   currentNetWorthError: null,
-  currentNetWorthLoading: false
+  currentNetWorthLoading: false,
+
+  allNetWorths: [],
+  allNetWorthsError: null,
+  allNetWorthsLoading: false,
+  deleteNetWorthErrorMessage: null
 };
 
 const postNetWorthStart = (state, action) => {
@@ -62,6 +67,48 @@ const getCurrentNetWorthFail = (state, action) => {
   });
 };
 
+const getAllNetWorthStart = (state, action) => {
+  return updateObject(state, {
+    allNetWorthsLoading: true,
+    allNetWorthsError: null,
+    allNetWorths: []
+  });
+};
+
+const getAllNetWorthSuccess = (state, action) => {
+  return updateObject(state, {
+    allNetWorthsLoading: false,
+    allNetWorths: action.allNetWorths
+  });
+};
+
+const getAllNetWorthFail = (state, action) => {
+  return updateObject(state, {
+    allNetWorthsLoading: false,
+    allNetWorthsError: action.error
+  });
+};
+
+const deleteNetWorthStart = (state, action) => {
+  return updateObject(state, {
+    allNetWorthsLoading: true,
+    deleteNetWorthErrorMessage: null
+  });
+};
+
+const deleteNetWorthSuccess = (state, action) => {
+  return updateObject(state, {
+    allNetWorthsLoading: false
+  });
+};
+
+const deleteNetWorthFail = (state, action) => {
+  return updateObject(state, {
+    allNetWorthsLoading: false,
+    deleteNetWorthErrorMessage: action.error
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.POST_NETWORTH_START:
@@ -78,6 +125,18 @@ const reducer = (state = initialState, action) => {
       return getCurrentNetWorthSuccess(state, action);
     case ActionTypes.GET_CURRENT_NETWORTH_FAIL:
       return getCurrentNetWorthFail(state, action);
+    case ActionTypes.GET_ALL_NETWORTH_START:
+      return getAllNetWorthStart(state, action);
+    case ActionTypes.GET_ALL_NETWORTH_SUCCESS:
+      return getAllNetWorthSuccess(state, action);
+    case ActionTypes.GET_ALL_NETWORTH_FAIL:
+      return getAllNetWorthFail(state, action);
+    case ActionTypes.DELETE_NETWORTH_START:
+      return deleteNetWorthStart(state, action);
+    case ActionTypes.DELETE_NETWORTH_SUCCESS:
+      return deleteNetWorthSuccess(state, action);
+    case ActionTypes.DELETE_NETWORTH_FAIL:
+      return deleteNetWorthFail(state, action);
     default:
       return state;
   }

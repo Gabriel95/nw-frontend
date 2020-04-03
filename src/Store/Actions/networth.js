@@ -71,3 +71,72 @@ export const getCurrentNetWorth = token => {
       .catch(error => dispatch(getCurrentNetWorthFail(error)));
   };
 };
+
+export const getAllNetWorthStart = () => {
+  return {
+    type: ActionTypes.GET_ALL_NETWORTH_START
+  };
+};
+
+export const getAllNetWorthSuccess = allNetWorths => {
+  return {
+    type: ActionTypes.GET_ALL_NETWORTH_SUCCESS,
+    allNetWorths: allNetWorths
+  };
+};
+
+export const getAllNetWorthFail = error => {
+  return {
+    type: ActionTypes.GET_ALL_NETWORTH_FAIL,
+    error: error.message
+  };
+};
+
+export const getAllNetWorth = token => {
+  return dispatch => {
+    dispatch(getAllNetWorthStart());
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axiosinstance
+      .get('/networth/getallnetworths', config)
+      .then(response => dispatch(getAllNetWorthSuccess(response.data)))
+      .catch(error => dispatch(getAllNetWorthFail(error)));
+  };
+};
+
+export const deleteNetWorthStart = () => {
+  return {
+    type: ActionTypes.DELETE_NETWORTH_START
+  };
+};
+
+export const deleteNetWorthSuccess = () => {
+  return {
+    type: ActionTypes.DELETE_NETWORTH_SUCCESS
+  };
+};
+
+export const deleteNetWorthFail = error => {
+  return {
+    type: ActionTypes.DELETE_NETWORTH_FAIL,
+    error: error.message
+  };
+};
+
+export const deleteNetWorth = (token, netWorthId) => {
+  return dispatch => {
+    dispatch(deleteNetWorthStart());
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axiosinstance
+      .delete('/networth/' + netWorthId, config)
+      .then(() => {
+        dispatch(deleteNetWorthSuccess());
+        dispatch(getCurrentNetWorth(token));
+        dispatch(getAllNetWorth(token));
+      })
+      .catch(error => dispatch(deleteNetWorthFail(error)));
+  };
+};

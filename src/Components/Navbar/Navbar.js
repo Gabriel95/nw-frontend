@@ -13,9 +13,9 @@ class Navbar extends React.Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div className="container-fluid">
-          <span className="navbar-brand">
+          <Link className="navbar-brand" to="/">
             <i className="fas fa-calculator mr-1"></i> Net Worth Calculator
-          </span>
+          </Link>
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
               <button
