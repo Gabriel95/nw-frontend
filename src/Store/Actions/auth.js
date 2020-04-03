@@ -78,3 +78,21 @@ export const auth = (email, password) => {
       });
   };
 };
+
+export const signup = body => {
+  return dispatch => {
+    dispatch(authStart());
+    axiosinstance
+      .post('/signup', body)
+      .then(response => {
+        const expiration = jwtDecode(response.data).exp * 1000;
+        localStorage.setItem('token', response.data);
+        localStorage.setItem('expirationDate', expiration);
+        dispatch(authSuccess(response.data));
+        dispatch(checkAuthTimeout(expiration));
+      })
+      .catch(error => {
+        dispatch(authFail(error));
+      });
+  };
+};
