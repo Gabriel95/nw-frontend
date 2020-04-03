@@ -18,6 +18,10 @@ class Home extends React.Component {
     }
   }
 
+  deleteClickHandler = (token, netWorthId) => {
+    this.props.deleteNetWorth(token, netWorthId);
+  };
+
   getNetWorthCardDeck = () => {
     if (this.props.currentNetWorthLoading) return <Spinner />;
     return <NetWorthCardDeck />;
@@ -25,7 +29,9 @@ class Home extends React.Component {
 
   getNetWorthHistory = () => {
     if (this.props.allNetWorthsLoading) return <Spinner />;
-    return <NetWorthHistoryTable />;
+    return (
+      <NetWorthHistoryTable deleteClickHandler={this.deleteClickHandler} />
+    );
   };
 
   displayError = (errorKey, strongErrorMessage) => {
@@ -57,6 +63,14 @@ class Home extends React.Component {
           <h2 className="mt-5 mb-3">
             Net Worth History <i className="fas fa-history ml-1"></i>
           </h2>
+          {this.displayError(
+            'deleteNetWorthErrorMessage',
+            'Error deleting net worth.'
+          )}
+          {this.displayError(
+            'allNetWorthsError',
+            'Error loading net worth history.'
+          )}
           {this.getNetWorthHistory()}
         </div>
       </div>
@@ -70,7 +84,8 @@ const mapStateToProps = state => {
     currentNetWorthLoading: state.networth.currentNetWorthLoading,
     currentNetWorthError: state.networth.currentNetWorthError,
     allNetWorthsError: state.networth.allNetWorthsError,
-    allNetWorthsLoading: state.networth.allNetWorthsLoading
+    allNetWorthsLoading: state.networth.allNetWorthsLoading,
+    deleteNetWorthErrorMessage: state.networth.deleteNetWorthErrorMessage
   };
 };
 
@@ -79,7 +94,9 @@ const mapDispatchToProps = dispatch => {
     tryAuth: () => dispatch(AuthActions.authCheckState()),
     getCurrentNetWorth: token =>
       dispatch(NetWorthActions.getCurrentNetWorth(token)),
-    getAllNetWorth: token => dispatch(NetWorthActions.getAllNetWorth(token))
+    getAllNetWorth: token => dispatch(NetWorthActions.getAllNetWorth(token)),
+    deleteNetWorth: (token, netWorthId) =>
+      dispatch(NetWorthActions.deleteNetWorth(token, netWorthId))
   };
 };
 

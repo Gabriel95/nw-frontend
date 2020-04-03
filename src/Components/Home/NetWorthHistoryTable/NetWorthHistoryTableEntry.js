@@ -13,7 +13,7 @@ class NetWorthHistoryTableEntry extends React.Component {
       <tr>
         <th scope="row">{this.props.iterator + 1}</th>
         <td>{this.formatDate(this.props.dateTimeCreated.split('T')[0])}</td>
-        <td>{this.props.dateTimeCreated.split('T')[1].split('.'[0])}</td>
+        <td>{this.props.dateTimeCreated.split('T')[1].split('.')[0]}</td>
         <td>${(+this.props.total).toLocaleString()}</td>
         <td>
           <div className="btn-group d-block">
@@ -23,7 +23,17 @@ class NetWorthHistoryTableEntry extends React.Component {
             >
               View
             </Link>
-            <button className="btn btn-outline-danger w-50">Delete</button>
+            <button
+              className="btn btn-outline-danger w-50"
+              onClick={() =>
+                this.props.deleteClickHandler(
+                  this.props.token,
+                  this.props.networthId
+                )
+              }
+            >
+              Delete
+            </button>
           </div>
         </td>
       </tr>

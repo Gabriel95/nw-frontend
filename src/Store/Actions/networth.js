@@ -104,3 +104,39 @@ export const getAllNetWorth = token => {
       .catch(error => dispatch(getAllNetWorthFail(error)));
   };
 };
+
+export const deleteNetWorthStart = () => {
+  return {
+    type: ActionTypes.DELETE_NETWORTH_START
+  };
+};
+
+export const deleteNetWorthSuccess = () => {
+  return {
+    type: ActionTypes.DELETE_NETWORTH_SUCCESS
+  };
+};
+
+export const deleteNetWorthFail = error => {
+  return {
+    type: ActionTypes.DELETE_NETWORTH_FAIL,
+    error: error.message
+  };
+};
+
+export const deleteNetWorth = (token, netWorthId) => {
+  return dispatch => {
+    dispatch(deleteNetWorthStart());
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axiosinstance
+      .delete('/networth/' + netWorthId, config)
+      .then(() => {
+        dispatch(deleteNetWorthSuccess());
+        dispatch(getCurrentNetWorth(token));
+        dispatch(getAllNetWorth(token));
+      })
+      .catch(error => dispatch(deleteNetWorthFail(error)));
+  };
+};

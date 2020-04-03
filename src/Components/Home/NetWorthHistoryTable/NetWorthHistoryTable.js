@@ -13,6 +13,9 @@ class NetWorthHistoryTable extends React.Component {
           dateTimeCreated={this.props.allNetWorths[i].dateTimeCreated}
           total={this.props.allNetWorths[i].total}
           networthId={this.props.allNetWorths[i].id}
+          deleteClickHandler={(token, networthId) =>
+            this.props.deleteClickHandler(token, networthId)
+          }
         />
       );
     }
@@ -31,7 +34,7 @@ class NetWorthHistoryTable extends React.Component {
             <th>Date Created</th>
             <th>Time</th>
             <th>Total</th>
-            <th className="text-cent">Actions</th>
+            <th className="text-center">Actions</th>
           </tr>
         </thead>
         <tbody>{this.generateTableEntries()}</tbody>
