@@ -28,9 +28,7 @@ export const postNetWorth = (token, body) => {
     };
     axiosinstance
       .post('/networth', body, config)
-      .then(() => {
-        dispatch(postNetWorthSuccess());
-      })
+      .then(() => dispatch(postNetWorthSuccess()))
       .catch(error => dispatch(postNetWorthFail(error)));
   };
 };
@@ -38,5 +36,38 @@ export const postNetWorth = (token, body) => {
 export const startForm = () => {
   return {
     type: ActionTypes.START_FORM
+  };
+};
+
+export const getCurrentNetWorthStart = () => {
+  return {
+    type: ActionTypes.GET_CURRENT_NETWORTH_START
+  };
+};
+
+export const getCurrentNetWorthSuccess = currentNetWorth => {
+  return {
+    type: ActionTypes.GET_CURRENT_NETWORTH_SUCCESS,
+    currentNetWorth: currentNetWorth
+  };
+};
+
+export const getCurrentNetWorthFail = error => {
+  return {
+    type: ActionTypes.GET_CURRENT_NETWORTH_FAIL,
+    error: error.message
+  };
+};
+
+export const getCurrentNetWorth = token => {
+  return dispatch => {
+    dispatch(getCurrentNetWorthStart());
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axiosinstance
+      .get('/networth/currentnetworth', config)
+      .then(response => dispatch(getCurrentNetWorthSuccess(response.data)))
+      .catch(error => dispatch(getCurrentNetWorthFail(error)));
   };
 };

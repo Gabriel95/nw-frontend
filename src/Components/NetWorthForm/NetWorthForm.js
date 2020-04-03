@@ -7,6 +7,7 @@ import * as labelMapper from '../../LabelMapper';
 import FormInput from './FormInput';
 import Spinner from '../Spinner/Spinner';
 import Alert from '../Alert/Alert';
+import { Link } from 'react-router-dom';
 
 class NetWorthForm extends React.Component {
   state = {
@@ -156,11 +157,13 @@ class NetWorthForm extends React.Component {
 
   async componentDidMount() {
     await this.props.tryAuth('NetWorthForm');
+    this.props.startForm();
     if (this.props.token === null) this.props.history.replace('/login');
   }
 
   async componentDidUpdate() {
-    await this.props.tryAuth('NetWorthForm');
+    if (this.props.token !== null) return;
+    await this.props.tryAuth();
     if (this.props.token === null) this.props.history.replace('/login');
   }
 
@@ -316,9 +319,9 @@ class NetWorthForm extends React.Component {
             <button type="submit" className="btn btn-success w-50">
               Submit
             </button>
-            <button type="" className="btn btn-danger w-50">
+            <Link className="btn btn-danger w-50" to="/">
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

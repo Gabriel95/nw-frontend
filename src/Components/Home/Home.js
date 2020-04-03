@@ -3,11 +3,34 @@ import Navbar from '../Navbar/Navbar';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as AuthActions from '../../Store/Actions/auth';
+import * as NetWorthActions from '../../Store/Actions/networth';
+import Spinner from '../Spinner/Spinner';
+import NetWorthCardDeck from './NetWorthCardDeck/NetWorthCardDeck';
+import Alert from '../Alert/Alert';
 
 class Home extends React.Component {
   componentDidMount() {
-    this.props.tryAuth('home');
+    this.props.tryAuth();
+    if (this.props.token !== null) {
+      this.props.getCurrentNetWorth(this.props.token);
+    }
   }
+
+  getNetWorthCardDeck = () => {
+    if (this.props.currentNetWorthLoading) return <Spinner />;
+    return <NetWorthCardDeck />;
+  };
+
+  displayError = (errorKey, strongErrorMessage) => {
+    if (this.props[errorKey] !== null)
+      return (
+        <Alert
+          type="danger"
+          strongMessage={strongErrorMessage}
+          message={this.props.currentNetWorthError}
+        />
+      );
+  };
 
   render() {
     if (this.props.token === null) return <Redirect to="/login" />;
@@ -19,38 +42,11 @@ class Home extends React.Component {
           <h2 className="mb-3">
             Current Net Worth <i className="fas fa-chart-line ml-1"></i>
           </h2>
-          <div className="card-deck">
-            <div className="card text-center">
-              <div className="card-body">
-                <h4 className="card-title">$100,000,000.00</h4>
-                <p className="card-text">Your current net worth.</p>
-                <p className="card-text">
-                  <small className="text-muted">01/04/2020</small>
-                </p>
-              </div>
-            </div>
-            <div className="card text-center">
-              <div className="card-body">
-                <h4 className="card-title">100%</h4>
-                <p className="card-text">
-                  Increase from your previous net worth.
-                </p>
-                <p className="card-text">
-                  <small className="text-muted">31/03/2020</small>
-                </p>
-              </div>
-            </div>
-            <div className="card text-center">
-              <div className="card-body">
-                <button className="btn btn-info btn-block card-title">
-                  <i className="fas fa-plus mr-1"></i>Calculate Net Worth
-                </button>
-                <p className="card-text">
-                  Click here to calculate your current Net Worth.
-                </p>
-              </div>
-            </div>
-          </div>
+          {this.displayError(
+            'currentNetWorthError',
+            'Error loading current net worth.'
+          )}
+          {this.getNetWorthCardDeck()}
           <h2 className="mt-5 mb-3">
             Net Worth History <i className="fas fa-history ml-1"></i>
           </h2>
@@ -107,13 +103,17 @@ class Home extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.token
+    token: state.auth.token,
+    currentNetWorthLoading: state.networth.currentNetWorthLoading,
+    currentNetWorthError: state.networth.currentNetWorthError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    tryAuth: () => dispatch(AuthActions.authCheckState())
+    tryAuth: () => dispatch(AuthActions.authCheckState()),
+    getCurrentNetWorth: token =>
+      dispatch(NetWorthActions.getCurrentNetWorth(token))
   };
 };
 
