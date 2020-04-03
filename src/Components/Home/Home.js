@@ -6,6 +6,7 @@ import * as AuthActions from '../../Store/Actions/auth';
 import * as NetWorthActions from '../../Store/Actions/networth';
 import Spinner from '../Spinner/Spinner';
 import NetWorthCardDeck from './NetWorthCardDeck/NetWorthCardDeck';
+import Alert from '../Alert/Alert';
 
 class Home extends React.Component {
   componentDidMount() {
@@ -20,6 +21,17 @@ class Home extends React.Component {
     return <NetWorthCardDeck />;
   };
 
+  displayError = (errorKey, strongErrorMessage) => {
+    if (this.props[errorKey] !== null)
+      return (
+        <Alert
+          type="danger"
+          strongMessage={strongErrorMessage}
+          message={this.props.currentNetWorthError}
+        />
+      );
+  };
+
   render() {
     if (this.props.token === null) return <Redirect to="/login" />;
 
@@ -30,6 +42,10 @@ class Home extends React.Component {
           <h2 className="mb-3">
             Current Net Worth <i className="fas fa-chart-line ml-1"></i>
           </h2>
+          {this.displayError(
+            'currentNetWorthError',
+            'Error loading current net worth.'
+          )}
           {this.getNetWorthCardDeck()}
           <h2 className="mt-5 mb-3">
             Net Worth History <i className="fas fa-history ml-1"></i>
