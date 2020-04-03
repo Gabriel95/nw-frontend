@@ -71,3 +71,36 @@ export const getCurrentNetWorth = token => {
       .catch(error => dispatch(getCurrentNetWorthFail(error)));
   };
 };
+
+export const getAllNetWorthStart = () => {
+  return {
+    type: ActionTypes.GET_ALL_NETWORTH_START
+  };
+};
+
+export const getAllNetWorthSuccess = allNetWorths => {
+  return {
+    type: ActionTypes.GET_ALL_NETWORTH_SUCCESS,
+    allNetWorths: allNetWorths
+  };
+};
+
+export const getAllNetWorthFail = error => {
+  return {
+    type: ActionTypes.GET_ALL_NETWORTH_FAIL,
+    error: error.message
+  };
+};
+
+export const getAllNetWorth = token => {
+  return dispatch => {
+    dispatch(getAllNetWorthStart());
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axiosinstance
+      .get('/networth/getallnetworths', config)
+      .then(response => dispatch(getAllNetWorthSuccess(response.data)))
+      .catch(error => dispatch(getAllNetWorthFail(error)));
+  };
+};

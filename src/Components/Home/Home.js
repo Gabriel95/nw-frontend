@@ -6,6 +6,7 @@ import * as AuthActions from '../../Store/Actions/auth';
 import * as NetWorthActions from '../../Store/Actions/networth';
 import Spinner from '../Spinner/Spinner';
 import NetWorthCardDeck from './NetWorthCardDeck/NetWorthCardDeck';
+import NetWorthHistoryTable from './NetWorthHistoryTable/NetWorthHistoryTable';
 import Alert from '../Alert/Alert';
 
 class Home extends React.Component {
@@ -13,12 +14,18 @@ class Home extends React.Component {
     this.props.tryAuth();
     if (this.props.token !== null) {
       this.props.getCurrentNetWorth(this.props.token);
+      this.props.getAllNetWorth(this.props.token);
     }
   }
 
   getNetWorthCardDeck = () => {
     if (this.props.currentNetWorthLoading) return <Spinner />;
     return <NetWorthCardDeck />;
+  };
+
+  getNetWorthHistory = () => {
+    if (this.props.allNetWorthsLoading) return <Spinner />;
+    return <NetWorthHistoryTable />;
   };
 
   displayError = (errorKey, strongErrorMessage) => {
@@ -50,51 +57,7 @@ class Home extends React.Component {
           <h2 className="mt-5 mb-3">
             Net Worth History <i className="fas fa-history ml-1"></i>
           </h2>
-          <table className="table">
-            <thead className="thead-dark">
-              <tr>
-                <th>#</th>
-                <th>Date Created</th>
-                <th>Time</th>
-                <th>Total</th>
-                <th className="text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>27/3/2020</td>
-                <td>16:30</td>
-                <td>$900,000.00</td>
-                <td>
-                  <div className="btn btn-group d-block">
-                    <button className="btn btn-outline-secondary w-50">
-                      View
-                    </button>
-                    <button className="btn btn-outline-danger w-50">
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>1/3/2020</td>
-                <td>15:30</td>
-                <td>$80,000.00</td>
-                <td>
-                  <div className="btn btn-group d-block">
-                    <button className="btn btn-outline-secondary w-50">
-                      View
-                    </button>
-                    <button className="btn btn-outline-danger w-50">
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {this.getNetWorthHistory()}
         </div>
       </div>
     );
@@ -105,7 +68,9 @@ const mapStateToProps = state => {
   return {
     token: state.auth.token,
     currentNetWorthLoading: state.networth.currentNetWorthLoading,
-    currentNetWorthError: state.networth.currentNetWorthError
+    currentNetWorthError: state.networth.currentNetWorthError,
+    allNetWorthsError: state.networth.allNetWorthsError,
+    allNetWorthsLoading: state.networth.allNetWorthsLoading
   };
 };
 
@@ -113,7 +78,8 @@ const mapDispatchToProps = dispatch => {
   return {
     tryAuth: () => dispatch(AuthActions.authCheckState()),
     getCurrentNetWorth: token =>
-      dispatch(NetWorthActions.getCurrentNetWorth(token))
+      dispatch(NetWorthActions.getCurrentNetWorth(token)),
+    getAllNetWorth: token => dispatch(NetWorthActions.getAllNetWorth(token))
   };
 };
 
