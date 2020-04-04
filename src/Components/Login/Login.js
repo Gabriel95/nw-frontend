@@ -112,6 +112,12 @@ class Login extends React.Component {
           className="w-50 mx-auto p-5 shadow border border-secondary rounded"
           onSubmit={this.handleSubmit}
         >
+          <img
+            src={require('../../pngwave.png')}
+            alt=""
+            className="mx-auto d-block mb-2"
+            style={{ width: '150px', height: '150px' }}
+          />
           <h2 className="text-center mb-3">Net Worth Calculator</h2>
           <h5 className="text-center text-danger">{this.props.errorMessage}</h5>
           {this.getFormBody()}

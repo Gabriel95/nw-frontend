@@ -152,11 +152,17 @@ class SignUp extends React.Component {
       return <Redirect to="/" />;
     }
     return (
-      <div className="container mt-5 pt-5">
+      <div className="container my-5 pt-5">
         <form
           className="w-75 mx-auto p-5 shadow border border-secondary rounded"
           onSubmit={this.handleSubmit}
         >
+          <img
+            src={require('../../pngwave.png')}
+            alt=""
+            className="mx-auto d-block mb-2"
+            style={{ width: '150px', height: '150px' }}
+          />
           <h2 className="text-center mb-3">Net Worth Calculator</h2>
           <h4 className="text-center mb-3">Register</h4>
           <h5 className="text-center text-danger mb-3">

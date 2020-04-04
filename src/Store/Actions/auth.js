@@ -83,7 +83,7 @@ export const signup = body => {
   return dispatch => {
     dispatch(authStart());
     axiosinstance
-      .post('/signup', body)
+      .post('/auth/signup', body)
       .then(response => {
         const expiration = jwtDecode(response.data).exp * 1000;
         localStorage.setItem('token', response.data);
